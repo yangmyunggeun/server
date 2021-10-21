@@ -1,0 +1,95 @@
+* {margin: 0; padding: 0; font-size: 100%; font: inherit; color: #7a7a7a; vertical-align: baseline;}
+ol, ul, li {list-style: none;}
+body, html {max-height:100%;}
+input {border: none;}
+
+.logo {position: fixed; top:15px; left:15px; width:120px; z-index: 2;}
+.upper, .lower {width:100%; height:50vh;}
+.upper {background-color:#fafafa;}
+.lower {background-color: #e7e7e7;}
+.container {position: relative; top: 5vh; left:50%; width:1360px; margin-left: -680px;}
+.inner-header {height: 30px; font-size: 14px; text-align: right;}
+.table1, .table2 {margin-top: 10px;}
+.table1 thead, .table2 thead, .table1 tbody, .table2 tbody {display: block;}
+.table1 tbody, .table2 tbody {max-height: 203px; overflow-y: auto;}
+.table1 tbody {width: 1500px;}
+.table2 tbody {width: 1500px;}
+.table1 thead tr th, .table2 thead tr th {width: 80px; height:60px; background-color: #9CE8D0; border: 1px solid #d7d7d7; border-bottom: none; vertical-align: middle !important; font-size: 14px; line-height: 1.5; font-weight: 700; color:#7a7a7a;}
+.table1 tbody tr td, .table2 tbody tr td {width: 80px; height:50px; border: 1px solid #d7d7d7; background-color: #ffffff; vertical-align: middle !important; text-align: center; font-size: 14px;}
+.table2 thead tr th, .table2 tbody tr td {width: 91px !important;}
+.inner-header div {display: inline-block; margin-left: 10px; width: 200px; font-weight: 700;}
+.inner-header div:last-child {width:270px;}
+input[name="startDate"], input[name="endDate"] {cursor: pointer; width: 100px; color: #7a7a7a; background-color: transparent;}
+.inner-header div button {width: 80px; height: 30px; border: none; background-color: #659DFF; color: #ffffff; font-weight: 700;}
+.inner-header div button:nth-child(2) {margin-left: 10px;}
+.inner-header div button:last-child {margin-left: 10px; background-color: #FF7677;}
+.inner-header div button:hover {transform: scale(1.1);}
+.inner-header div button:active {transform: scale(0.9);}
+.table2 tbody tr td > input[type="text"], input[name="dates"] {width: 90px; height: 30px; text-align: center; cursor:text;  color: #7a7a7a;}
+.table2 tbody tr td select {width: 90px; height: 30px; cursor: pointer; border: none;  color: #7a7a7a;}
+.table2 tbody tr td img {width:20px; cursor: pointer;}
+.table2 tbody tr td img:hover {transform: scale(1.2);}
+
+/* modal */
+.modal-open {overflow: hidden;}
+.modal {position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1050; display: none; overflow: hidden; -webkit-overflow-scrolling: touch; outline: 0;}
+.modal.fade .modal-dialog { -webkit-transition: -webkit-transform .3s ease-out; -o-transition: -o-transform .3s ease-out; transition: transform .3s ease-out; -webkit-transform: translate(0, -25%); -ms-transform: translate(0, -25%); -o-transform: translate(0, -25%); transform: translate(0, -25%);}
+.modal.in .modal-dialog {-webkit-transform: translate(0, 0); -ms-transform: translate(0, 0); -o-transform: translate(0, 0); transform: translate(0, 0);}
+.modal-open .modal {overflow-x: hidden; overflow-y: auto;}
+.modal-dialog {position: relative; width: auto; margin: 10px;}
+.modal-content {position: relative; background-color: #fff; -webkit-background-clip: padding-box; background-clip: padding-box; border: 1px solid #999; border: 1px solid rgba(0, 0, 0, .2); outline: 0; -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5); box-shadow: 0 3px 9px rgba(0, 0, 0, .5);}
+.modal-backdrop {position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1040; background-color: #000;}
+.modal-backdrop.fade {filter: alpha(opacity=0); opacity: 0;}
+.modal-backdrop.in {filter: alpha(opacity=50); opacity: .5;}
+.modal-header {padding: 15px;}
+.modal-header h4 {font-size:18px; font-weight: 700;}
+.modal-header .close {margin-top: -2px; border: none; background-color: transparent;}
+.modal-title {margin: 0; line-height: 1.42857143;}
+.modal-body {position: relative; padding: 15px;}
+.modal-body p {font-size: 14px; color: #2f2f2f; line-height: 2;}
+.modal-footer {padding: 15px; text-align: center;}
+.modal-footer .btn + .btn {margin-bottom: 0; margin-left: 5px;}
+.modal-footer .btn-group .btn + .btn {margin-left: -1px;}
+.modal-footer .btn-block + .btn-block {margin-left: 0;}
+.modal-scrollbar-measure {position: absolute; top: -9999px; width: 50px; height: 50px; overflow: scroll;}
+.modalBtn {width: 80px; height: 30px; font-size: 14px; text-align: center;}
+.modal-header .btn-close {color: #646464 !important; font-size: 30px; text-decoration: none; position: absolute; right: 5px; top: 0;}
+
+.table-fixed {width: 100%;}
+.table-fixed tbody {height: 300px; overflow-y: auto; width: 100%;}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {display: block;}
+.table-fixed thead th, .table-fixed tbody td {height:50px; float: left; text-align: center; border-bottom: 1px solid #d7d7d7; line-height: 3;}
+.table-fixed thead th {background-color: #9CE8D0; color: #fff; font-weight: 700;}
+.table-fixed tbody td {cursor: pointer}
+.selected {background-color: #C8FFA7 !important; font-weight: 700;}
+.table-fixed thead th:first-child, .table-fixed tbody td:first-child {width:200px; }
+.table-fixed thead th:last-child {margin-right: 17px;}
+.table-fixed thead th:last-child, .table-fixed tbody td:last-child {width:300px; float:right !important;}
+.table-fixed thead tr th {float: left; border-color: 2px solid #2f2f2f;}
+
+.calc-table {width:320px;}
+.calc-table tbody, .calc-table tr {display: block;}
+.calc-table tr td {border: 5px solid #fff;}
+.calc-table tr td button {width:100px; height:100px; border: none; background-color: #999999; color: #ffffff; vertical-align: middle; font-size: 18px; font-weight: 700;}
+.calc-table tr td button:hover {background-color: #666666;}
+.calc-table tr td button:active {transform: scale(0.9); background-color: #666666;}
+
+#list-modal, #calc-modal {position: absolute; top:50%; left:50%; width:600px; margin-top: -300px; margin-left: -300px; font-size:14px;}
+#list-modal .modal-header, #calc-modal .modal-header {margin-left: 20px; margin-right: 20px; height:60px; border-bottom: 1px solid #7a7a7a;}
+#calc-modal .modal-header {height: 30px;}
+#calc-modal .modal-body {width: 500px; height: 430px; text-align: center;}
+#list-modal .search {float: right;}
+#list-modal input {width:200px; height: 30px; border: 1px solid #7a7a7a;}
+#calc-modal input {widows: 180px; height:50px; border: 1px solid #7a7a7a; margin-left: 30px; text-align: center;}
+#list-modal .searchBtn {width:80px; height: 30px; border: none; background-color: #659DFF; color: #ffffff; margin-left: 10px; font-weight: 700;}
+#list-modal .selectBtn, #calc-modal .insertBtn {width:80px; height: 30px; border: none; background-color: #659DFF; color: #ffffff; font-weight: 700; margin-right: 10px;}
+#list-modal .closeBtn, #calc-modal .closeBtn {width:80px; height: 30px; border: none; background-color: #FF7677; color: #ffffff; font-weight: 700;}
+#list-modal .searchBtn:hover, #list-modal .selectBtn:hover, #list-modal .closeBtn:hover, #calc-modal .insertBtn:hover, #calc-modal .closeBtn:hover {transform: scale(1.1);}
+#list-modal .searchBtn:active, #list-modal .selectBtn:active, #list-modal .closeBtn:active, #calc-modal .insertBtn:active, #calc-modal .closeBtn:active {transform: scale(0.9);}
+.productImg {
+    max-width: 40%;
+ }
+.product_image
+{
+    width: 90px;
+}

@@ -1,0 +1,386 @@
+<script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="/plugin/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/plugin/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="/js/modal.js"></script>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    var tr = $('.tablebody').children('tr');
+    var tlength = tr.size();
+
+    for (var i=0; i<tlength; i++) {
+      tr.eq(i).children('td[class="No"]').text(i+1);
+
+      if (tr.eq(i).children('td[class="worked"]').text() == 0) {
+        tr.eq(i).children('td[class="state"]').text('대기중');
+      } else if (tr.eq(i).children('td[class="worked"]').text() == tr.eq(i).children('td[class="working"]').text()) {
+        tr.eq(i).children('td[class="state"]').text('작업완료');
+        tr.eq(i).children().css('background-color', '#e7e7e7');
+      } else {
+        tr.eq(i).children('td[class="state"]').text('진행중');
+      }
+    }
+  });
+
+  function findindex() {
+    var target = event.target;
+    var parent = target.parentNode.parentNode;
+    var rowIndex = parent.rowIndex-1;
+    document.getElementById('rowIndex').value = rowIndex;
+  }
+  function allCheck(){
+      if( $(".allCheck").is(':checked') ){
+        $("input[name=selectRow]").prop("checked", true);
+      } else {
+        $("input[name=selectRow]").prop("checked", false);
+      }
+  }
+  function resetCalc(){
+    $("#insertNum").val('');
+  }
+
+  $('.list tr td').hover(function(){
+    $(this).parent().children('td').css('background-color', '#f1f1f1');
+  }, function(){
+    $(this).parent().children('td').css('background-color', '#fff');
+  });
+  $('.list tr td').on('click', function(){
+    $('.list tr td').removeClass('selected');
+    $(this).parent().children('td').addClass('selected');
+  });
+  $('#insert').on('keyup', function(){
+     var insertName = $(this).val();
+     $('.list tr').hide();
+     // $('.list tr td').removeClass('selected');
+     var userName = $('.list tr td:contains("'+insertName+'")');
+     $(userName).parent().show();
+     // $(userName).parent().children('td').addClass('selected');
+  });
+
+  $('.calcBtn').click(function(ev){
+    var calcVal = $(this).val();
+    var total = $('#insertNum').val();
+    // var sum = Number(total) + Number(calcVal);
+    var sum = total + calcVal;
+
+    $('#insertNum').val(sum.toString());
+
+    ev.preventDefault();
+  })
+
+  $('input[name="startDate"], input[name="endDate"], input[name="fromDate"], input[name="toDate"]').daterangepicker({
+    singleDatePicker: true,
+    opens: "center",
+    drops: "down"
+  });
+
+  $(function(){
+    $('input[name="startDate"]').focusout(function(ev){
+      var startDate = $(this).val();
+      $('input[name="endDate"]').daterangepicker({
+        singleDatePicker: true,
+        opens: "center",
+        drops: "down",
+        minDate : startDate
+      });
+    })
+    $('input[name="fromDate"]').focusout(function(ev){
+      var fromDate = $(this).val();
+      $(this).parents('tr').children().children('input[name="toDate"]').daterangepicker({
+        singleDatePicker: true,
+        opens: "center",
+        drops: "down",
+        minDate : fromDate
+      });
+    })
+  });
+
+  $('#retrieveBtn').click(function (ev){
+    var startDate = $('input[name="startDate"]').val();
+    var endDate = $('input[name="endDate"]').val();
+
+    $('.tablebody tr').hide();
+
+    var std = $('.rowSdate:contains("'+startDate+'")');
+    var ftd = $('.rowfdate:contains("'+endDate+'")');
+    std.parent().show();
+
+    ev.eventDefault();
+  })
+
+  $('#deleteBtn').click(function (ev){
+    var checklist = [];
+    $('input[name=selectRow]:checked').each(function(i){
+      checklist.push($(this).val());
+    });
+
+    if (!$('input[name=selectRow]:checked').val()) {
+      alert("삭제할 자료를 선택해주세요");
+    } else {
+      $.ajax({
+        type: "POST",
+        url: "/delete",
+        data: { checklist : checklist },
+        traditional : true,
+        success: function(result) {
+            if (result == "success") {
+                alert("삭제가 완료되었습니다");
+                window.location.assign("/");
+            } else {
+                alert("오류가 발생했습니다");
+            }
+        }
+      })
+    }
+    ev.preventDefault();
+  })
+
+  $('#addBtn').click(function (ev){
+    var rowNum = $('.table2 tr').length;
+    var html = '<tr>'
+      +'<form method="post" id="pickingForm">'
+        +'<td><input type="checkbox" checked disabled></td>'
+        +'<td name="No">'+rowNum+'</td>'
+        +'<td class="form-group" id="id"></td>'
+        +'<td class="form-group" id="name">'
+          +'<img src="/images/magnifier.svg" onclick="findindex()" data-toggle="modal" data-target="#list-modal"></td>'
+        +'<td class="form-group">'
+          +'<select id="taskType">'
+            +'<option value="입고적치">입고적치</option>'
+            +'<option value="출고피킹">출고피킹</option>'
+            +'<option value="재고조회">재고조회</option>'
+            +'<option value="재고이동">재고이동</option>'
+          +'</select>'
+          +'</td>'
+          +'<td class="form-group">'
+          +'<select id="from">'
+            +'<option value="A">A</option>'
+            +'<option value="B">B</option>'
+            +'<option value="C">C</option>'
+            +'<option value="D">D</option>'
+            +'<option value="E">E</option>'
+            +'<option value="F">F</option>'
+            +'<option value="G">G</option>'
+            +'<option value="H">H</option>'
+            +'<option value="I">I</option>'
+            +'<option value="J">J</option>'
+            +'<option value="K">K</option>'
+            +'<option value="L">L</option>'
+            +'<option value="M">M</option>'
+            +'<option value="N">N</option>'
+            +'<option value="O">O</option>'
+            +'<option value="P">P</option>'
+            +'<option value="Q">Q</option>'
+            +'<option value="R">R</option>'
+            +'<option value="S">S</option>'
+            +'<option value="T">T</option>'
+            +'<option value="U">U</option>'
+            +'<option value="V">V</option>'
+            +'<option value="W">W</option>'
+            +'<option value="X">X</option>'
+            +'<option value="Y">Y</option>'
+            +'<option value="Z">Z</option>'
+          +'</select>'
+        +'</td>'       
+        +'<td class="form-group">'
+          +'<select id="to">'
+            +'<option value="A">A</option>'
+            +'<option value="B">B</option>'
+            +'<option value="C">C</option>'
+            +'<option value="D">D</option>'
+            +'<option value="E">E</option>'
+            +'<option value="F">F</option>'
+            +'<option value="G">G</option>'
+            +'<option value="H">H</option>'
+            +'<option value="I">I</option>'
+            +'<option value="J">J</option>'
+            +'<option value="K">K</option>'
+            +'<option value="L">L</option>'
+            +'<option value="M">M</option>'
+            +'<option value="N">N</option>'
+            +'<option value="O">O</option>'
+            +'<option value="P">P</option>'
+            +'<option value="Q">Q</option>'
+            +'<option value="R">R</option>'
+            +'<option value="S">S</option>'
+            +'<option value="T">T</option>'
+            +'<option value="U">U</option>'
+            +'<option value="V">V</option>'
+            +'<option value="W">W</option>'
+            +'<option value="X">X</option>'
+            +'<option value="Y">Y</option>'
+            +'<option value="Z">Z</option>'
+          +'</select>'
+        +'</td>'
+        +'<td class="form-group"><input type="text" value="A" id="areaCode"></td>'
+        +'<td class="form-group"><input type="text" value="A존" id="area"></td>'
+        +'<td class="form-group"><input type="text" value="점주" id="shipper"></td>'
+        +'<td class="form-group"><input type="text" name="fromDate" value="" id="start"></td>'
+        +'<td class="form-group"><input type="text" name="toDate" value="" id="finish"></td>'
+        +'<td class="form-group"><input type="text" value="AAAA" id="productCode"></td>'
+        +'<td class="form-group"><input type="text" value="A cloth" id="product"></td>'
+        +'<td class="form-group"><input type="text" value="10" id="number" onclick="findindex()" data-toggle="modal" data-target="#calc-modal"></td>'
+        +'<td class="form-group"><input type="file" class="product_image" name="product_image" accept="image/*" style="display: none;" data-index="'+rowNum+'">\
+                <img class="browseImage" src="/images/upload-2-xxl.png" onclick="onBrowseImage('+rowNum+');" data-index="'+rowNum+'"/></td>'
+      +'</form>'
+    +'</tr>'
+
+    $('.tbody').append(html);
+    $('input[name="fromDate"], input[name="toDate"]').daterangepicker({
+      singleDatePicker: true,
+      opens: "center",
+      drops: "up"
+    });
+    $('input[name="fromDate"]').focusout(function(ev){
+      var fromDate = $(this).val();
+        $(this).parents('tr').children().children('input[name="toDate"]').daterangepicker({
+        singleDatePicker: true,
+        opens: "center",
+        drops: "up",
+        minDate : fromDate
+      });
+    })
+    function findindex() {
+      var target = event.target;
+      var parent = target.parentNode.parentNode;
+      var rowIndex = parent.rowIndex-1;
+      document.getElementById('rowIndex').value = rowIndex;
+    }
+    ev.preventDefault();
+  })
+
+  $('#saveBtn').click(function (ev){
+    // var trdata = new Array();
+    // var tddata = new Array();
+    // var tlength = $('.tbody tr').size();
+    //
+    // Loop1 : for (var i=0; i<tlength; i++) {
+    //   var tr = $('.tbody tr');
+    //
+    //   Loop2 : for (var j=0; j<3; j++) {
+    //     var selectdata = tr.eq(i).children().children('select');
+    //     tddata.push(selectdata.eq(j).val());
+    //   }
+    //   Loop3 : for (var k=0; k<8; k++) {
+    //     var inputdata = tr.eq(i).children().children('input[type="text"]');
+    //     tddata.push(inputdata.eq(k).val());
+    //   }
+    //
+    // }
+    // trdata.push(tddata);
+
+    var tr = $('.tbody').children('tr');
+    var tlength = tr.size();
+    var array = Array(tlength).fill(null).map(()=>Array());
+
+    for (var i=0; i<tlength; i++) {
+      array[i].push(tr.eq(i).children().children('#userID').val());
+      array[i].push(tr.eq(i).children().children('#userName').val());
+      array[i].push(tr.eq(i).children().children('#taskType').val());
+      array[i].push(tr.eq(i).children().children('#from').val());
+      array[i].push(tr.eq(i).children().children('#to').val());
+      array[i].push(tr.eq(i).children().children('#areaCode').val());
+      array[i].push(tr.eq(i).children().children('#area').val());
+      array[i].push(tr.eq(i).children().children('#shipper').val());
+      array[i].push(tr.eq(i).children().children('#start').val());
+      array[i].push(tr.eq(i).children().children('#finish').val());
+      array[i].push(tr.eq(i).children().children('#productCode').val());
+      array[i].push(tr.eq(i).children().children('#product').val());
+      array[i].push(tr.eq(i).children().children('#number').val());
+    }
+
+    if (!array) {
+      alert("입력된 값이 존재하지 않습니다");
+    } else {
+      var formData = new FormData();
+      formData.append('work_data', JSON.stringify(array));
+      for(var i = 0; i < tlength; i++)
+      {
+        var image = $('.product_image')[i].files[0];
+        formData.append('product_image' + i, image);
+      }
+      
+      $.ajax({
+        type: "POST",
+        url: "/board1",
+        data: formData,        
+        contentType: false,
+        processData: false,
+        success: function(result) {
+          if (result == "success") {
+                alert("저장이 완료되었습니다");                
+                window.location.assign("/");                
+            } else {
+                alert("오류가 발생했습니다");
+            }
+        }
+      })
+    }
+
+    ev.preventDefault();
+
+  })
+
+  $('#insertBtn').click(function (ev){
+    var name = $('.selected:first-child').text();
+    var id =$('.selected:last-child').text();
+    var rowIndex = $('#rowIndex').val();
+
+    // $('#id').html('<input type="text" value="'+id+'" id="userID">')
+    // $('#name').html('<input type="text" value="'+name+'" id="userID">')
+    $('.tbody tr').eq(rowIndex).children('td[id="id"]').html('<input type="text" value="'+id+'" id="userID">')
+    $('.tbody tr').eq(rowIndex).children('td[id="name"]').html('<input type="text" value="'+name+'" id="userName">')
+
+    ev.preventDefault();
+
+  })
+
+  $('#insertNumBtn').click(function (ev){
+    var insertNum = $('#insertNum').val();
+    var rowIndex = $('#rowIndex').val();
+
+    // $('#number').val(insertNum);
+    $('.tbody tr').eq(rowIndex).children().children('input[id="number"]').val(insertNum);
+    $('#insertNum').val('');
+    $('#calc-modal').modal('hide');
+    ev.preventDefault();
+  })
+  $('#closeCalcBtn').click(function (ev){
+    $('#insertNum').val('');
+    $('#calc-modal').modal('hide');
+  })
+  $('#renewBtn').click(function (ev){
+    window.location.assign("/");
+  })
+
+  function onBrowseImage(index)
+  {
+    $('.product_image[data-index='+index+']').click();
+  }
+
+  $(document).on('change', '.product_image', function(){
+    var file = this.files[0];
+    var data_index = $(this).attr('data-index');
+    if (file) {
+        //check extension      
+      var imgExtension = this.value.substr(this.value.length - 3).toLowerCase();
+      if (imgExtension != 'jpg' && imgExtension != 'png') {
+          alert("파일형식이 바르지 않습니다.");
+          this.val('');
+          return;
+      }
+    } 
+    var _URL = window.URL || window.webkitURL;
+    var img = new Image();
+    img.src = _URL.createObjectURL(file);
+
+    img.onload = function () {
+      $('.browseImage[data-index='+data_index+']').attr("src", this.src);
+        return;
+    };
+    img.onerror = function () {        
+        $(this).val('');
+        return;
+    };    
+  });
+</script>

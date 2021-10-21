@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Xpert">
+  <meta property="og:description" content="">
+  <title>Xpert</title>
+  <!-- global -->
+  <link rel="icon" type="image/png" href="/images/tab_logo.png">
+  <link type="text/css" rel="stylesheet" href="css/style_dnct.css"/>
+  <!-- normalize -->
+	<link type="text/css" rel="stylesheet" href="css/normalize.css"/>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+<body>
+  <section class="logIn-container">
+    <div class="left">
+      <img src="images/icon.png">
+    </div>
+    <div class="right">
+      <div class="header">
+        <p>LOGIN</p>
+      </div>
+      <form action="" method="post">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="ID" id="id" required>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="Password" id="password" required>
+        </div>
+        <!-- <button type="button" class="boxBtn" id="logInBtn">
+          LOGIN
+        </button> -->
+        <button type="button" class="boxBtn" id="logInBtn">
+          LOGIN
+        </button>
+      </form>
+      <!-- <div class="footer">
+
+      </div> -->
+    </div>
+  </section>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $("#logInBtn").click(function (ev){
+    var id = $('#id').val();
+    var password = $('#password').val();
+
+    if( !id ){
+     alert("아이디를 입력해주세요");
+     $("#id").focus();
+     return false;
+   } else if(!password) {
+      alert("비밀번호를 입력해주세요");
+      $("#password").focus()
+      return false;
+    } else {
+      $.ajax({
+        type: "POST",
+        url: "/dnct_logIn",
+        data:  { id : id, password : password },
+        success: function(result) {
+            console.log("result : ", result);                        
+            const id = result.id;
+            if (id) {
+              // window.location.assign("/id=?"+id);
+              window.location.assign("/?id="+id);
+            } else if (!id) {
+              alert("등록된 아이디가 없습니다");
+            } else {
+              alert("비밀번호가 일치하지 않습니다");
+            }
+        }
+    })
+   }
+   ev.preventDefault();
+  })
+
+  $("#id").keydown(function(key){
+    if (key.keyCode == 13) {
+      $("#password").focus();
+    }
+  });
+
+  $("#password").keydown(function(key){
+    if (key.keyCode == 13) {
+      $("#logInBtn").click();
+    }
+  });
+</script>
+</body>
+</html>
